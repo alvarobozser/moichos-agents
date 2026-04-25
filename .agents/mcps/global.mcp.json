@@ -1,0 +1,48 @@
+{
+  "_type": "template",
+  "_description": "PLANTILLA de referencia. El fichero activo que Claude Code lee es /.mcp.json en la raíz del proyecto.",
+  "_credentials": "Las credenciales van en variables de entorno definidas en .env (ver .env.example). NUNCA en este fichero.",
+
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "<WORKSPACE_ROOT>"],
+      "usedBy": ["all"],
+      "credentials": "ninguna"
+    },
+    "git": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-git", "<WORKSPACE_ROOT>"],
+      "usedBy": ["all"],
+      "credentials": "ninguna (usa la config git del sistema)"
+    },
+    "github": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-github"],
+      "usedBy": ["orchestrator", "reviewer"],
+      "credentials": "GITHUB_PERSONAL_ACCESS_TOKEN → definir en .env",
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-fetch"],
+      "usedBy": ["docs"],
+      "credentials": "ninguna"
+    },
+    "stdio": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-stdio"],
+      "usedBy": ["coder", "security"],
+      "credentials": "ninguna"
+    }
+  },
+
+  "_howToAddNew": [
+    "1. Añade la entrada del nuevo servidor en este fichero (documentación)",
+    "2. Añade la entrada también en /.mcp.json (el fichero activo)",
+    "3. Si necesita credenciales: añade la variable en .env.example",
+    "4. Documenta la variable en la sección correspondiente de .env.example"
+  ]
+}

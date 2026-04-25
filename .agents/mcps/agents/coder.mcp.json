@@ -1,0 +1,21 @@
+{
+  "description": "MCPs adicionales para el agente Coder",
+  "extends": "../global.mcp.json",
+  "mcpServers": {
+    "stdio": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-stdio"],
+      "description": "Ejecución de comandos: compilar, linter, formatter"
+    }
+  },
+  "suggestedTools": [
+    "Linter del proyecto (eslint, pylint, golangci-lint)",
+    "Formatter (prettier, black, gofmt)",
+    "Type checker (tsc --noEmit, mypy)",
+    "Build tool (npm run build, gradle build, cargo build)"
+  ],
+  "notes": [
+    "Activar stdio permite al Coder ejecutar el linter y el compilador",
+    "Añadir el servidor de lenguaje (LSP) si el proyecto lo tiene configurado"
+  ]
+}

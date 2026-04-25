@@ -1,0 +1,20 @@
+{
+  "description": "MCPs adicionales para el agente Docs",
+  "extends": "../global.mcp.json",
+  "mcpServers": {
+    "fetch": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-fetch"],
+      "description": "Acceso HTTP para consultar documentación externa, APIs y referencias"
+    }
+  },
+  "suggestedIntegrations": [
+    "Confluence MCP (si el proyecto usa Confluence para docs internas)",
+    "Notion MCP (si el proyecto usa Notion)",
+    "OpenAPI validator para verificar specs"
+  ],
+  "notes": [
+    "El servidor fetch permite leer documentación externa para mantener referencias actualizadas",
+    "Añadir integración con la herramienta de docs del proyecto si existe"
+  ]
+}

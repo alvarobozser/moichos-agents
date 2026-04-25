@@ -1,0 +1,137 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  "providers": {
+    "anthropic": {
+      "apiKey": "{env:ANTHROPIC_API_KEY}"
+    }
+  },
+
+  "mcp": {
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "."],
+      "enabled": true
+    },
+    "git": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-git", "."],
+      "enabled": true
+    },
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "enabled": true,
+      "environment": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    },
+    "fetch": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-fetch"],
+      "enabled": true
+    }
+  },
+
+  "agent": {
+    "orchestrator": {
+      "description": "Agente principal. Lee la petición del usuario y delega al agente especializado correcto. Nunca ejecuta tareas directamente.",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-20250514",
+      "prompt": "{file:./.agents/MANIFEST.md}\n\n{file:./.agents/orchestrator/agent.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false
+      }
+    },
+    "planner": {
+      "description": "Descompone requisitos en tareas atómicas con estimaciones y roadmap.",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-20250514",
+      "prompt": "{file:./.agents/agents/planner/agent.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false
+      }
+    },
+    "coder": {
+      "description": "Implementa código nuevo, refactors y bug fixes siguiendo las convenciones del proyecto.",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-20250514",
+      "prompt": "{file:./.agents/agents/coder/agent.md}",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "tester": {
+      "description": "Escribe tests unitarios y de integración con patrón AAA.",
+      "mode": "subagent",
+      "model": "anthropic/claude-haiku-4-20250514",
+      "prompt": "{file:./.agents/agents/tester/agent.md}",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    },
+    "architect": {
+      "description": "Decisiones de diseño estructural, ADRs y diagramas Mermaid.",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4",
+      "prompt": "{file:./.agents/agents/architect/agent.md}",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": false
+      }
+    },
+    "security": {
+      "description": "Auditoría OWASP Top 10, detección de secrets y análisis de vulnerabilidades.",
+      "mode": "subagent",
+      "model": "anthropic/claude-opus-4-20250514",
+      "prompt": "{file:./.agents/agents/security/agent.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": true
+      }
+    },
+    "reviewer": {
+      "description": "Revisión final de código, tests y docs. Siempre es el último agente antes de entregar.",
+      "mode": "primary",
+      "model": "anthropic/claude-sonnet-4-20250514",
+      "prompt": "{file:./.agents/agents/reviewer/agent.md}",
+      "tools": {
+        "write": false,
+        "edit": false,
+        "bash": false
+      }
+    },
+    "docs": {
+      "description": "Genera y actualiza README, API docs y changelogs.",
+      "mode": "subagent",
+      "model": "anthropic/claude-haiku-4-20250514",
+      "prompt": "{file:./.agents/agents/docs/agent.md}",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": false
+      }
+    },
+    "frontend": {
+      "description": "Componentes UI/UX accesibles con WCAG 2.1 AA mínimo.",
+      "mode": "subagent",
+      "model": "anthropic/claude-sonnet-4-20250514",
+      "prompt": "{file:./.agents/agents/frontend/agent.md}",
+      "tools": {
+        "write": true,
+        "edit": true,
+        "bash": false
+      }
+    }
+  }
+}

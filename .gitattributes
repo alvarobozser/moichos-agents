@@ -1,0 +1,6 @@
+# Normaliza saltos de línea al hacer checkout
+* text=auto
+
+# Scripts shell siempre con LF
+*.sh text eol=lf
+*.ps1 text eol=crlf

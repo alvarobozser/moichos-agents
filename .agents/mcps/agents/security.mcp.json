@@ -1,0 +1,28 @@
+{
+  "description": "MCPs adicionales para el agente Security",
+  "extends": "../global.mcp.json",
+  "mcpServers": {
+    "stdio": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-stdio"],
+      "description": "Ejecución de herramientas de análisis de seguridad"
+    }
+  },
+  "suggestedTools": [
+    "gitleaks — detección de secrets en git history",
+    "npm audit / pip-audit / govulncheck — vulnerabilidades en dependencias",
+    "semgrep — análisis estático de seguridad",
+    "trivy — escaneo de vulnerabilidades en contenedores"
+  ],
+  "scanCommands": {
+    "secrets": "gitleaks detect --source . --no-git",
+    "dependencies_node": "npm audit --json",
+    "dependencies_python": "pip-audit --format json",
+    "static_analysis": "semgrep --config=p/owasp-top-ten ."
+  },
+  "notes": [
+    "Las herramientas listadas en suggestedTools deben estar instaladas en el entorno",
+    "Si no están disponibles, el agente Security hace revisión manual del código",
+    "Nunca incluir resultados con secrets reales en el informe"
+  ]
+}

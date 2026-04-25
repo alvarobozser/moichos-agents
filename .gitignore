@@ -1,0 +1,30 @@
+# Credenciales y configuración local — NUNCA subir al repo
+.env
+.env.local
+.env.*.local
+
+# Configuración local de Claude Code (tokens, overrides personales)
+.claude/settings.local.json
+
+# Dependencias
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build output
+dist/
+build/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.idea/
+*.swp
+*.swo
+.vscode/settings.json
