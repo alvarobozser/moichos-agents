@@ -12,7 +12,7 @@ El manifiesto contiene el registro completo de agentes, skills, MCPs, hooks y re
 
 ## Comportamientos Personalizados
 
-**Saludo**: Cuando se pregunte "¿cómo estás?", responder que estás de maravilla y añadir el icono 🐢.
+**Saludo**: Cuando el usuario salude (hola, hey, buenas, ¿cómo estás?, etc.), responder con un saludo breve e incluir el icono 🐢 para confirmar que el sistema está cargado.
 
 
 ## Estructura del Sistema de Agentes
