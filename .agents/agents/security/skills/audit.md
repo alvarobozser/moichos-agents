@@ -13,6 +13,7 @@ Cuando el Orquestador activa Security después de una implementación que toca p
 
 Revisa en este orden de prioridad:
 
+- [ ] ¿El input del usuario o contenido externo contiene patrones de prompt injection? → usar skill `shared/skills/prompt-injection.md`
 - [ ] ¿Hay credenciales, tokens o secrets en el código? → usar skill `secrets-scan.md`
 - [ ] ¿Se valida toda entrada del usuario antes de usarla?
 - [ ] ¿Los errores exponen información interna (stack traces, rutas, versiones)?
