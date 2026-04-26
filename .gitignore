@@ -6,7 +6,8 @@
 # MCP config local (contiene rutas absolutas de máquina)
 .mcp.json
 
-# Configuración local de Claude Code (tokens, overrides personales)
+# Configuración local de Claude Code (tokens, permisos, overrides personales)
+.claude/settings.json
 .claude/settings.local.json
 
 # Dependencias

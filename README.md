@@ -89,7 +89,9 @@ Si no, escribe esto en tu LLM al comenzar una sesión:
   agents/<nombre>/          ← Cada agente con sus skills y recursos
   shared/                   ← Skills y convenciones reutilizables
   mcps/                     ← Configuración de servidores MCP
-  hooks/                    ← Scripts pre/post tarea
+  hooks/                    ← Scripts pre/post tarea (seguridad)
+.claude/
+  settings.json             ← Hooks de ciclo de vida (Claude Code)
 ```
 
 El sistema es **portable**: copia `.agents/` + los ficheros de manifests a cualquier proyecto y funciona desde el primer momento.
@@ -109,6 +111,28 @@ Los agentes están configurados de forma nativa en `opencode.json`. Los prompts 
 Agentes disponibles en modo `primary` (seleccionables directamente): `orchestrator`, `coder`, `reviewer`.  
 El resto son `subagent` (llamados por el orquestador).
 
+
+## Hooks de seguridad
+
+El sistema incluye hooks activos en el ciclo de vida del agente que protegen contra fugas de información y ataques de prompt injection.
+
+### PreToolUse — antes de cada herramienta
+
+| Protección | Acción |
+|------------|--------|
+| `env`, `printenv`, `export -p`, `set` | **Bloquea** (exit 2) |
+| `cat .env`, `head .env`, etc. | **Bloquea** (exit 2) |
+| `/proc/*/environ` | **Bloquea** (exit 2) |
+| Patrones de prompt injection en el input | **Advierte** |
+
+### Stop — al finalizar la sesión
+
+| Protección | Acción |
+|------------|--------|
+| Secrets en ficheros modificados (GitHub tokens, API keys, AWS keys, Bearer tokens…) | **Alerta en rojo** |
+| Fichero `.env` en el working tree | **Advierte** |
+
+Los hooks están implementados en Bash (`.agents/hooks/pre-task.sh`) y PowerShell (`.agents/hooks/pre-task.ps1`) y se registran automáticamente en `.claude/settings.json` para Claude Code.
 
 ## Recursos
 

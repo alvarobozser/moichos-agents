@@ -92,12 +92,25 @@ source .env   # Bash/Zsh
 
 Ver plantillas detalladas: [mcps/global.mcp.json](mcps/global.mcp.json)
 
-## Hooks
+## Hooks de Seguridad
 
 | Evento | Bash | PowerShell | Propósito |
 |--------|------|-----------|----------|
-| pre-task | [hooks/pre-task.sh](hooks/pre-task.sh) | [hooks/pre-task.ps1](hooks/pre-task.ps1) | Validar entorno antes de ejecutar |
-| post-task | [hooks/post-task.sh](hooks/post-task.sh) | [hooks/post-task.ps1](hooks/post-task.ps1) | Log y notificación tras completar |
+| PreToolUse | [hooks/pre-task.sh](hooks/pre-task.sh) | [hooks/pre-task.ps1](hooks/pre-task.ps1) | Bloquea env dumps, lectura de .env y detecta prompt injection |
+| Stop | [hooks/post-task.sh](hooks/post-task.sh) | [hooks/post-task.ps1](hooks/post-task.ps1) | Escanea ficheros modificados en busca de secrets |
+
+Registrados en `.claude/settings.json` para Claude Code.
+
+## Skills del Sistema vs Agentes
+
+Algunos skills de Claude Code tienen un agente equivalente más fiable (sin dependencia de bash). El orquestador debe preferir el agente en peticiones de lenguaje natural:
+
+| Skill `/slash` | Agente preferido | Razón |
+|---------------|-----------------|-------|
+| `/security-review` | `security` | Usa Grep/Read nativos — funciona en todos los entornos |
+| `/review` | `reviewer` | Ídem |
+| `/simplify` | `reviewer` | Ídem |
+| `/update-config`, `/loop`, `/schedule`, `/init`, `/keybindings-help` | — | Sin equivalente, usar directamente |
 
 ## Lógica de Enrutamiento
 

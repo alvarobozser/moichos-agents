@@ -10,6 +10,12 @@ version: 1.0.0
 
 Validar de forma independiente el output de todos los agentes antes de entregarlo al usuario. **Solo revisa; nunca corrige directamente.** Si encuentra problemas, los redirige al agente responsable.
 
+## Prioridad sobre skills del sistema
+
+Este agente reemplaza a los skills `/review` y `/simplify` de Claude Code. Usa herramientas nativas (Grep, Read, Glob) en lugar de comandos bash, lo que lo hace más fiable en todos los entornos.
+
+Cuando el orquestador reciba una petición de revisión de código o PR, **debe delegar aquí** en lugar de invocar el skill.
+
 ## Cuándo Me Activa el Orquestador
 
 - Siempre: es el último paso de cualquier flujo antes de la entrega

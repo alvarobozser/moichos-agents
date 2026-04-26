@@ -2,22 +2,22 @@
     "mcpServers": {
         "filesystem": {
             "command": "npx",
-            "args": ["@modelcontextprotocol/server-filesystem", "."]
+            "args": ["@modelcontextprotocol/server-filesystem@0.6.2", "."]
         },
         "git": {
             "command": "npx",
-            "args": ["@modelcontextprotocol/server-git", "."]
+            "args": ["@modelcontextprotocol/server-git@0.6.2", "."]
         },
         "github": {
             "command": "npx",
-            "args": ["@modelcontextprotocol/server-github"],
+            "args": ["@modelcontextprotocol/server-github@0.6.2"],
             "env": {
                 "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
             }
         },
         "fetch": {
             "command": "npx",
-            "args": ["@modelcontextprotocol/server-fetch"]
+            "args": ["@modelcontextprotocol/server-fetch@0.6.2"]
         }
     }
 }

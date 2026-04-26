@@ -13,6 +13,12 @@ model_fallback_warning: "⚠️ Ejecutado con modelo de fallback. El informe de 
 
 Auditar el código en busca de vulnerabilidades (OWASP Top 10), credenciales expuestas y malas prácticas de seguridad. Emite un informe con severidad y recomendaciones.
 
+## Prioridad sobre skills del sistema
+
+Este agente reemplaza al skill `/security-review` de Claude Code. Usa herramientas nativas (Grep, Read, Glob) en lugar de comandos bash, lo que lo hace más fiable en todos los entornos (incluido Windows + Git Bash).
+
+Cuando el orquestador reciba una petición de auditoría de seguridad, **debe delegar aquí** en lugar de invocar el skill.
+
 ## Cuándo Me Activa el Orquestador
 
 - La implementación expone endpoints, procesa entrada del usuario o maneja datos sensibles

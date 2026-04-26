@@ -1,7 +1,11 @@
 #!/bin/bash
 # bootstrap.sh — Descarga e instala el sistema multi-agente desde GitHub
 #
-# Uso (una sola línea, desde cualquier PC):
+# Uso sugerido (MÁS SEGURO - recomendado):
+#   git clone https://github.com/alvarobozser/moichos-agents.git
+#   bash moichos-agents/bootstrap.sh
+#
+# Uso alternativo (ADVERTENCIA: inspecciona el script antes de ejecutar):
 #   curl -sSL https://raw.githubusercontent.com/alvarobozser/moichos-agents/main/bootstrap.sh | bash
 #   curl -sSL https://raw.githubusercontent.com/alvarobozser/moichos-agents/main/bootstrap.sh | bash -s -- --target /ruta/proyecto
 

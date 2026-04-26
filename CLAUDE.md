@@ -14,6 +14,15 @@ El manifiesto contiene el registro completo de agentes, skills, MCPs, hooks y re
 
 **Saludo**: Cuando el usuario salude (hola, hey, buenas, ¿cómo estás?, etc.), responder con un saludo breve e incluir el icono 🐢 para confirmar que el sistema está cargado.
 
+**Prioridad de agentes sobre skills del sistema**: Los siguientes skills de Claude Code tienen un agente equivalente en este proyecto que es más fiable (usa herramientas nativas, sin dependencia de bash). **NO invocar el skill — delegar al agente directamente**:
+
+| Petición del usuario | Agente a usar | Skill a ignorar |
+|----------------------|--------------|-----------------|
+| Auditoría seguridad, secrets, OWASP, vulnerabilidades | `security` | `/security-review` |
+| Revisar código, PR review, validar calidad | `reviewer` | `/review`, `/simplify` |
+
+Los skills `/update-config`, `/loop`, `/schedule`, `/init`, `/keybindings-help` no tienen equivalente — usarlos normalmente.
+
 ## Propósito del Workspace
 
 Workspace personal para explorar agentes IA, sistemas autónomos y herramientas basadas en agentes. Contiene un sistema multi-agente portable y reutilizable.

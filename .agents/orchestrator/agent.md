@@ -65,6 +65,19 @@ Usuario
 - Presenta el resultado consolidado, no los outputs intermedios
 - Si el Reviewer encontró problemas, no los expones hasta que estén resueltos
 
+## Skills del sistema vs Agentes
+
+Algunos skills de Claude Code tienen un agente equivalente más fiable (sin dependencia de bash). Cuando la petición llegue en lenguaje natural, usa **siempre el agente**:
+
+| Si el usuario pide… | Usa agente | NO uses skill |
+|---------------------|-----------|---------------|
+| Auditoría de seguridad, secrets, OWASP | `security` | `/security-review` |
+| Revisar código, PR review, validar output | `reviewer` | `/review`, `/simplify` |
+
+Los skills `/update-config`, `/loop`, `/schedule`, `/init`, `/keybindings-help` no tienen equivalente — úsalos directamente.
+
+> Si el usuario invoca explícitamente `/security-review` o `/review` con la barra, el skill se lanza directo y el orquestador no puede interceptarlo. Informa al usuario de que puede obtener el mismo resultado sin barra.
+
 ## Escalación
 
 Si después de 2 rondas de corrección el Reviewer sigue rechazando, para y presenta el problema al usuario con contexto completo.

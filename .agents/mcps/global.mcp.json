@@ -6,19 +6,19 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-filesystem", "<WORKSPACE_ROOT>"],
+      "args": ["@modelcontextprotocol/server-filesystem@0.6.2", "<WORKSPACE_ROOT>"],
       "usedBy": ["all"],
       "credentials": "ninguna"
     },
     "git": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-git", "<WORKSPACE_ROOT>"],
+      "args": ["@modelcontextprotocol/server-git@0.6.2", "<WORKSPACE_ROOT>"],
       "usedBy": ["all"],
       "credentials": "ninguna (usa la config git del sistema)"
     },
     "github": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-github"],
+      "args": ["@modelcontextprotocol/server-github@0.6.2"],
       "usedBy": ["orchestrator", "reviewer"],
       "credentials": "GITHUB_PERSONAL_ACCESS_TOKEN → definir en .env",
       "env": {
@@ -27,7 +27,7 @@
     },
     "fetch": {
       "command": "npx",
-      "args": ["@modelcontextprotocol/server-fetch"],
+      "args": ["@modelcontextprotocol/server-fetch@0.6.2"],
       "usedBy": ["docs"],
       "credentials": "ninguna"
     },
