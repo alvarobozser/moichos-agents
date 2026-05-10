@@ -2,13 +2,12 @@
 
 ## Inicio obligatorio para cualquier agente o LLM
 
-**Carga este fichero primero, luego carga el manifiesto:**
+**Carga estos ficheros en orden:**
 
-```
-.agents/MANIFEST.md
-```
+1. `.mcp.json` — Configuración de MCPs (REQUIERE carga automática)
+2. `.agents/MANIFEST.md` — Registro de agentes, skills, recursos
 
-El manifiesto contiene el registro completo de agentes, skills, MCPs, hooks y recursos del sistema.
+El manifiesto contiene el registro completo de agentes, skills, MCPs, hooks y recursos del sistema. El `.mcp.json` debe cargarse automáticamente para que los MCPs (Playwright, GitHub, etc.) estén disponibles.
 
 ## Comportamientos Personalizados
 

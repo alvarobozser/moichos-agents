@@ -50,6 +50,12 @@ bash install.sh /ruta/al/proyecto          # Unix
 
 Ambos comandos aceptan `--force` / `-Force` para sobreescribir si ya existe.
 
+## Mejoras Recientes (v1.1)
+
+- **Fallbacks de modelos ejecutables** — Si un agente falla porque el modelo preferido no está disponible, el orquestador consulta `.agents/mcps/model-fallback.json`, reintenta con el siguiente modelo en la cadena y muestra advertencias de degradación. Ver [protocolo de fallback](.agents/orchestrator/agent.md#protocolo-de-fallback)
+- **Routing con criterios objetivos** — Paso 1 ahora usa checklists concretas (no "ambigüedad subjetiva") para decidir cuándo activar Planner/Architect
+- **Seguridad preventiva** — Paso 0 detecta ataques de prompt ANTES de clasificar/delegar (no post-facto)
+
 ## Configuración tras instalar
 
 ### 1. Variables de entorno (credenciales MCP)
@@ -135,18 +141,29 @@ Ver: [.github/workflows/README.md](.github/workflows/README.md)
 
 ---
 
-## Hooks de seguridad
+## Seguridad en Capas
 
-El sistema incluye hooks activos en el ciclo de vida del agente que protegen contra fugas de información y ataques de prompt injection.
+El sistema incluye **dos niveles** de protección contra ataques de prompt injection:
 
-### PreToolUse — antes de cada herramienta
+### Nivel 1 — PREVENTIVO (Paso 0 del orquestador)
+
+Antes de clasificar o delegar a agentes, el orquestador verifica:
+- ¿El input del usuario contiene patrones maliciosos?
+- ¿Algún MCP devolvería contenido externo no confiable?
+- ¿Los outputs de MCPs contienen patrones sospechosos?
+
+Si detecta algo: **detiene inmediatamente**, reporta, sin continuar.
+
+### Nivel 2 — DEFENSIVO (Hooks pre-tarea)
+
+Cuando el agente intenta ejecutar una herramienta:
 
 | Protección | Acción |
 |------------|--------|
 | `env`, `printenv`, `export -p`, `set` | **Bloquea** (exit 2) |
 | `cat .env`, `head .env`, etc. | **Bloquea** (exit 2) |
 | `/proc/*/environ` | **Bloquea** (exit 2) |
-| Patrones de prompt injection en el input | **Advierte** |
+| Patrones de ataque en el input | **Bloquea** (exit 2) |
 
 ### Stop — al finalizar la sesión
 
@@ -159,8 +176,11 @@ Los hooks están implementados en Bash (`.agents/hooks/pre-task.sh`) y PowerShel
 
 ## Recursos
 
+- [Lógica de routing y criterios objetivos](.agents/orchestrator/routing.md)
+- [Matriz de fallbacks de modelos](.agents/mcps/model-fallback.json)
+- [Detección de ataques de prompt](.agents/shared/skills/prompt-injection.md)
+- [Manifiesto completo del sistema](.agents/MANIFEST.md)
 - [Convenciones del proyecto](.agents/shared/resources/conventions.md)
 - [Referencias y benchmarks](.agents/shared/resources/references.md)
-- [Manifiesto completo del sistema](.agents/MANIFEST.md)
 - [agentskills.io — convención de skills](https://agentskills.io/skill-creation/quickstart)
 - [Model Context Protocol](https://modelcontextprotocol.io)

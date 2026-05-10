@@ -1,0 +1,164 @@
+{
+  "_type": "configuration",
+  "_version": "1.0.0",
+  "_description": "Model fallback matrix — ejecutable por cualquier orquestador/runtime. Define cadena de fallback para cada agente cuando el modelo preferido no está disponible.",
+  "_howToUse": "1. Cuando un agente requiere modelo X y no está disponible, usar el fallback Y de la matriz. 2. Si Y también falla, continuar a la siguiente opción. 3. Si llega a la última opción (degradación aceptable), mostrar advertencia al usuario ANTES de ejecutar.",
+
+  "agents": {
+    "orchestrator": {
+      "preferred": "claude-sonnet-4-6",
+      "fallback_chain": [
+        {
+          "model": "claude-opus-4-7",
+          "degradation": "none",
+          "reason": "Más capacidad no es problema para routing"
+        },
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "degradation": "light",
+          "reason": "Routing más básico, posibles errores en casos ambiguos",
+          "user_warning": "⚠️ Ejecutado con modelo de fallback (Haiku). El routing puede ser menos preciso en peticiones complejas."
+        }
+      ]
+    },
+    "planner": {
+      "preferred": "claude-sonnet-4-6",
+      "fallback_chain": [
+        {
+          "model": "claude-opus-4-7",
+          "degradation": "none",
+          "reason": "Mejor para descomposición"
+        },
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "degradation": "light",
+          "reason": "Planes menos detallados, estimaciones menos precisas",
+          "user_warning": "⚠️ Ejecutado con modelo de fallback (Haiku). Los planes pueden ser menos granulares."
+        }
+      ]
+    },
+    "coder": {
+      "preferred": "claude-sonnet-4-6",
+      "fallback_chain": [
+        {
+          "model": "claude-opus-4-7",
+          "degradation": "none",
+          "reason": "Mejor para código complejo"
+        },
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "degradation": "moderate",
+          "reason": "Código más simple, posibles edge cases no cubiertos",
+          "user_warning": "⚠️ Ejecutado con modelo de fallback (Haiku). Revisar el código para edge cases y complejidad."
+        }
+      ]
+    },
+    "tester": {
+      "preferred": "claude-haiku-4-5-20251001",
+      "fallback_chain": [
+        {
+          "model": "claude-sonnet-4-6",
+          "degradation": "none",
+          "reason": "Mejor para tests complejos"
+        }
+      ]
+    },
+    "architect": {
+      "preferred": "claude-opus-4-7",
+      "fallback_chain": [
+        {
+          "model": "claude-sonnet-4-6",
+          "degradation": "high",
+          "reason": "Decisiones arquitectónicas pueden ser menos sólidas",
+          "user_warning": "⚠️ CRÍTICO: Ejecutado con modelo de fallback (Sonnet). Todas las decisiones de arquitectura DEBEN revisarse manualmente antes de aceptarse."
+        },
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "degradation": "critical",
+          "reason": "NO RECOMENDADO. Haiku no es capaz de decisiones arquitectónicas",
+          "user_warning": "⚠️ CRÍTICO: Modelo completamente inadecuado. Abortar y esperar a Opus/Sonnet."
+        }
+      ]
+    },
+    "security": {
+      "preferred": "claude-opus-4-7",
+      "fallback_chain": [
+        {
+          "model": "claude-sonnet-4-6",
+          "degradation": "high",
+          "reason": "Detectabilidad de vulnerabilidades reducida (~85% vs 98%)",
+          "user_warning": "⚠️ CRÍTICO: Ejecutado con modelo de fallback (Sonnet). El informe de seguridad DEBE revisarse manualmente — pueden existir vulnerabilidades no detectadas."
+        },
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "degradation": "critical",
+          "reason": "NO RECOMENDADO. Haiku tiene capacidad muy limitada para OWASP",
+          "user_warning": "⚠️ CRÍTICO: Modelo completamente inadecuado. Abortar y esperar a Opus/Sonnet."
+        }
+      ]
+    },
+    "reviewer": {
+      "preferred": "claude-sonnet-4-6",
+      "fallback_chain": [
+        {
+          "model": "claude-opus-4-7",
+          "degradation": "none",
+          "reason": "Mejor para revisión exhaustiva"
+        },
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "degradation": "moderate",
+          "reason": "Revisión menos exhaustiva, posibles issues no detectadas",
+          "user_warning": "⚠️ Ejecutado con modelo de fallback (Haiku). La revisión puede ser incompleta."
+        }
+      ]
+    },
+    "docs": {
+      "preferred": "claude-haiku-4-5-20251001",
+      "fallback_chain": [
+        {
+          "model": "claude-sonnet-4-6",
+          "degradation": "none",
+          "reason": "Mejor para docs complejas"
+        }
+      ]
+    },
+    "frontend": {
+      "preferred": "claude-sonnet-4-6",
+      "fallback_chain": [
+        {
+          "model": "claude-opus-4-7",
+          "degradation": "none",
+          "reason": "Mejor para accesibilidad compleja"
+        },
+        {
+          "model": "claude-haiku-4-5-20251001",
+          "degradation": "moderate",
+          "reason": "Riesgo en WCAG compliance, estilos pueden ser simplistas",
+          "user_warning": "⚠️ Ejecutado con modelo de fallback (Haiku). Revisar accesibilidad (WCAG) manualmente."
+        }
+      ]
+    }
+  },
+
+  "_multiLlmSupport": {
+    "anthropic": {
+      "description": "Modelos Anthropic nativos",
+      "models": ["claude-opus-4-7", "claude-sonnet-4-6", "claude-haiku-4-5-20251001"],
+      "implementation": "Direct API o Claude Code"
+    },
+    "openai": {
+      "description": "OpenAI models (fallback agnóstico, no recomendado para agnositismo)",
+      "models": ["gpt-4o", "gpt-4-turbo"],
+      "mapping": {
+        "claude-opus-4-7": "gpt-4o",
+        "claude-sonnet-4-6": "gpt-4-turbo",
+        "claude-haiku-4-5-20251001": "gpt-4-turbo"
+      },
+      "note": "Este mapeo es aproximado. Verificar capacidades reales antes de usar."
+    },
+    "othersProviders": {
+      "note": "Extender con más proveedores según sea necesario. Mantener matriz de degradación igual para todos."
+    }
+  }
+}

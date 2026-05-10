@@ -18,8 +18,14 @@
 
 ## Modelos por Agente
 
-> Estos son **recomendaciones documentales**, no configuración ejecutable. El modelo real lo fija el LLM que uses.  
-> Si un modelo no está disponible, aplica el fallback de la tabla.
+**Estos valores son el PUNTO DE ENTRADA a la cadena de fallbacks.**
+
+- El modelo **preferido** es el primero que intenta el orquestador
+- Si falla (modelo no disponible), el orquestador consulta `mcps/model-fallback.json`
+- Reintenta con el siguiente modelo en la cadena `fallback_chain`
+- Continúa hasta éxito o llegar a degradación "critical" (escala al usuario)
+
+**Nota:** En `agent.md` de cada agente hay `model` + `model_fallback` para referencia local. La fuente de verdad para reintentos es `model-fallback.json`.
 
 | Agente | Modelo preferido | Fallback | Degradación aceptable |
 |--------|-----------------|---------|----------------------|
@@ -39,12 +45,13 @@ Cuando no hay Opus disponible, añade este aviso al output del agente:
 
 ## Recursos Compartidos
 
-| Recurso | Ruta | Uso |
-|---------|------|-----|
+| Recurso | Ruta | Tipo | Uso |
+|---------|------|------|-----|
+| **Model fallback matrix** | [mcps/model-fallback.json](mcps/model-fallback.json) | **EJECUTABLE** | Cuando un agente falla porque el modelo preferido no está disponible, el orquestador consulta esta matriz y reintenta con el siguiente modelo en la cadena. Ver protocolo en [orchestrator/agent.md](orchestrator/agent.md#protocolo-de-fallback) |
 | Git skills | [shared/skills/git.md](shared/skills/git.md) | Operaciones git reutilizables |
 | Filesystem skills | [shared/skills/filesystem.md](shared/skills/filesystem.md) | Operaciones de ficheros |
 | GitHub setup | [shared/skills/github-setup.md](shared/skills/github-setup.md) | Workflow de Claude PR Review (auto-revisor en PRs) |
-| Prompt injection detection | [shared/skills/prompt-injection.md](shared/skills/prompt-injection.md) | Detección de intentos de inyección en prompts |
+| Prompt injection detection | [shared/skills/prompt-injection.md](shared/skills/prompt-injection.md) | Detección de intentos de ataque en prompts |
 | Conventions | [shared/resources/conventions.md](shared/resources/conventions.md) | Estándares de código del proyecto |
 | References | [shared/resources/references.md](shared/resources/references.md) | Links externos curados |
 
@@ -119,6 +126,25 @@ Algunos skills de Claude Code tienen un agente equivalente más fiable (sin depe
 ## Lógica de Enrutamiento
 
 Ver [orchestrator/routing.md](orchestrator/routing.md) para el árbol de decisión completo.
+
+### Paso 0 — Seguridad Preventiva (NUEVO en v1.1)
+
+**Antes de cualquier clasificación**, el orquestador ejecuta un check de seguridad:
+1. ¿El input contiene patrones de ataque? → Detener
+2. ¿Hay MCPs activos que devolverán datos externos? → Marcar como no confiable
+3. ¿Los outputs de MCPs contienen patrones sospechosos? → Detener
+
+Esto es **preventivo** (antes) no reactivo (después). Implementación: [shared/skills/prompt-injection.md](shared/skills/prompt-injection.md)
+
+### Paso 1 — Criterios Objetivos para Routing (MEJORADO en v1.1)
+
+**Antes:** "¿La petición es ambigua?" (subjetivo)  
+**Ahora:** Checklists concretas por agente:
+- **¿Planner?** → ¿≥2 requisitos? ¿Palabras clave de plan? ¿Complejidad alta?
+- **¿Architect?** → ¿Cambios de estructura/patrones/tech? ¿Nuevos contratos?
+- **¿Respuesta directa?** → ¿Sin código? ¿Sin ficheros? ¿Solo info?
+
+Cada criterio es verificable sin ambigüedad.
 
 ## Compatibilidad Multi-LLM
 
