@@ -43,6 +43,8 @@ Cuando no hay Opus disponible, añade este aviso al output del agente:
 |---------|------|-----|
 | Git skills | [shared/skills/git.md](shared/skills/git.md) | Operaciones git reutilizables |
 | Filesystem skills | [shared/skills/filesystem.md](shared/skills/filesystem.md) | Operaciones de ficheros |
+| GitHub setup | [shared/skills/github-setup.md](shared/skills/github-setup.md) | Workflow de Claude PR Review (auto-revisor en PRs) |
+| Prompt injection detection | [shared/skills/prompt-injection.md](shared/skills/prompt-injection.md) | Detección de intentos de inyección en prompts |
 | Conventions | [shared/resources/conventions.md](shared/resources/conventions.md) | Estándares de código del proyecto |
 | References | [shared/resources/references.md](shared/resources/references.md) | Links externos curados |
 
@@ -51,12 +53,14 @@ Cuando no hay Opus disponible, añade este aviso al output del agente:
 ### Arquitectura de dos capas
 
 ```
-/.mcp.json                      ← ACTIVO — Claude Code lo lee aquí (raíz del proyecto)
+/.mcp.json                      ← ACTIVO Y REQUERIDO — DEBE cargarse automáticamente en CLAUDE.md
 /.env                           ← credenciales reales (gitignored, cada dev crea el suyo)
 /.env.example                   ← plantilla de variables (committed, sin valores reales)
 .agents/mcps/global.mcp.json    ← PLANTILLA/documentación (referencia para añadir MCPs)
 .agents/mcps/agents/*.mcp.json  ← PLANTILLA por agente (qué MCPs activos por agente)
 ```
+
+⚠️ **IMPORTANTE**: Para que los MCPs (Playwright, GitHub, Fetch, etc.) estén disponibles, **CLAUDE.md DEBE instruir a Claude Code que cargue automáticamente `.mcp.json`** al iniciar la sesión.
 
 ### MCPs activos
 

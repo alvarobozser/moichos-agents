@@ -111,6 +111,29 @@ Los agentes están configurados de forma nativa en `opencode.json`. Los prompts 
 Agentes disponibles en modo `primary` (seleccionables directamente): `orchestrator`, `coder`, `reviewer`.  
 El resto son `subagent` (llamados por el orquestador).
 
+## GitHub Actions — Revisión automática de PRs
+
+El proyecto incluye un workflow que revisa **automáticamente todas las PRs con Claude**.
+
+### Configuración rápida
+
+1. **Obtén una API key** de Anthropic: https://console.anthropic.com (plan gratuito: $5/mes)
+2. **Añade a Secrets de GitHub:**
+   - `Settings → Secrets and variables → Actions`
+   - Secret: `ANTHROPIC_API_KEY = <tu-key>`
+3. **Listo.** El siguiente PR que abras será revisado automáticamente 🤖
+
+### Flujo
+
+```
+PR abierta → GitHub Actions dispara → Claude analiza diff → Comenta resultados
+```
+
+### Documentación completa
+
+Ver: [.github/workflows/README.md](.github/workflows/README.md)
+
+---
 
 ## Hooks de seguridad
 
